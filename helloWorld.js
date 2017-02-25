@@ -1,6 +1,16 @@
 var http = require('http');
-fs=require('fs');
+var fs=require('fs');
+var mongoose = require('mongoose');
+var express = require('express');
 
+
+//DB config
+var Schema=mongoose.Schema;
+mongoose.connect();
+
+
+
+//serving staticfiles
 function serveStaticFile(res, path, contentType, responseCode){
     if(!responseCode) responseCode=200;
     fs.readFile("C:/Users/Michelle/Documents/GitHub/HackBu2017/veiws/"+ path ,function(err,data){
@@ -15,9 +25,10 @@ function serveStaticFile(res, path, contentType, responseCode){
         }
     });
 
-}
+}//serving staticfiles
 
 
+//create Server
 http.createServer(function(req,res){ 
     var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
     switch(path){
