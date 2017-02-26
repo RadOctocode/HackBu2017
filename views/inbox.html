@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<style>
+	body {
+    background-color:#3b5998;
+	}	
+		h1 {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 80px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 5000;
+	line-height: 100px;
+	color:white;
+}
+p {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 26.4px;
+	color:white;
+}
+
+input[type=submit] {
+    padding:5px 15px; 
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
+}
+
+</style>
+</head>
+<body>
+<center>
+<h1>look at all the people you finally have a reason to fight</h1>
+<body>
+<ul>
+<% for(var i=0; i<requets.length; i++) {%>
+   <p name='username'><%= requets[i].usernameFrom %>:<%= requets[i].description %> 
+   </p>
+<% } %>
+</ul>
+</body>
+</center>
+</html>
+</body>

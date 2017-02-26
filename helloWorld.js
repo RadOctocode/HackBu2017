@@ -9,6 +9,9 @@ var bodyParser=require('body-parser');
 var app=express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html')
+
 
 mongoose.connect('mongodb://localhost:27017/hackbu');
 
@@ -20,9 +23,14 @@ var userSchema= new Schema({
     password: String
 });
 
-var User = mongoose.model('User', userSchema, 'users');
+var requestSchema= new Schema({
+    usernameTo:String,
+    description: String,
+    usernameFrom:String
+});
 
-//mongoose.connect('mongodb://localhost:27017/users');
+var User = mongoose.model('User', userSchema, 'users');
+var Request = mongoose.model('Request', requestSchema, 'requests'); 
 
 app.post('/pls', function(req, res){
         console.log(req.body);
@@ -42,11 +50,12 @@ app.post('/login', function(req, res){
         
         var username=req.body.username;
         var password= req.body.password;
-            User.find({ username: username }, function(err, myUser){
+            User.findOne({ username: username }, function(err, myUser){
+                console.log(myUser);
                 if(err){console.log("Wrong password/username");}
 
                 else{
-                        if(myUser[0].password===password){
+                        if(myUser.password===password){
                             return res.redirect('/home');
                         }
 
@@ -57,25 +66,80 @@ app.post('/login', function(req, res){
             });
 });
 
+/*app.post('/deleteReq', function(req, res){
 
+
+
+});*/
+
+app.get('/user/:username', function(req, res) {
+    var findUser=req.params.username;
+    console.log(findUser);
+    return User.findOne({ username: findUser}, function(err, myUser) {
+        console.log(myUser);
+        if (err || !myUser) {
+            console.log(err);
+            return res.redirect('/home');
+        }
+        return res.render('users.html',{
+            "myUser" : myUser
+        });
+    });
+});
+
+app.get('/inbox/:username', function(req, res) {
+    var findUser=req.params.username;
+    return Request.find({ usernameTo: findUser}, function(err, myReq) {
+        console.log("hey"+myReq);
+
+        if (err || !myReq) {
+            console.log(err);
+            return res.redirect('/home');
+        }
+
+        return res.render('inbox.html',{
+            "requets": myReq 
+        });
+    });
+});
+
+
+app.post('/sendReq', function(req, res){
+        var request= new Request({
+        "usernameTo": req.body.usernameT,
+        "description": req.body.fight_req,
+        "usernameFrom": req.body.usernameF
+
+        });
+        console.log(request);
+        request.save(function(err){
+            console.log(err);
+            return res.redirect('/home');
+        });
+
+});
+
+
+app.get('/fightform', function(req, res) {
+        return res.render('fight_form');
+});
 
 
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname+'/veiws/index.html'));
+    res.sendFile(path.join(__dirname+'/views/index.html'));
 });
 
 app.get('/register', function(req, res) {
-    res.sendFile(path.join(__dirname+'/veiws/registration.html'));
+    res.sendFile(path.join(__dirname+'/views/registration.html'));
 });
 
 app.get('/login', function(req, res) {
-    res.sendFile(path.join(__dirname+'/veiws/login.html'));
+    res.sendFile(path.join(__dirname+'/views/login.html'));
 });
 
 app.get('/home', function(req, res) {
-    res.sendFile(path.join(__dirname+'/veiws/homePage.html'));
+    res.sendFile(path.join(__dirname+'/views/homePage.html'));
 });
-
 
 app.listen(3000, function() {
     console.log('Running on localhost:3000');
