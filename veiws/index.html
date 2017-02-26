@@ -1,7 +1,39 @@
 <!DOCTYPE html>
 <html>
+<head>
+<script src="helloWorld.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+$(function() {
+
+	$("#createAccount").click(function createAcount(event){
+		var json={
+		"username":	$("#username").val(),
+		"password":	$("#password").val()
+		};
+
+		console.log(json);
+		return json;
+	});
+
+
+});
+
+</script>
+</head>
 <body>
-<h1>hOME</h1>
+<h1>Create Account</h1>
+<form  name ="createAccount">
+  First name:<br>
+  <input type="text" id="username" value="">
+  <br>
+  password:<br>
+  <input type="text" id="password" value="">
+  <br><br>
+  <input id="createAccount" type="button" value="Submit">
+</form> 
+
 
 <html>
 <body>

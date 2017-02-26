@@ -6,9 +6,33 @@ var express = require('express');
 
 //DB config
 var Schema=mongoose.Schema;
-mongoose.connect();
+mongoose.connect('mongodb://localhost:27017/users');
+//jquery post request
+//express end point
+//my schema
+/*var userSchema= new Schema({
+    userName:{
+        type: String;
+        unique:true;
+    };
+    password: String;
+    //description:String;
+});
+
+// Line to set up your schema, var User = get schema heres
+
+// db variable
+/* var user = new User({
+  // json data
+}); */
+//var user = new User({
 
 
+//})
+
+//user.save(function(err, res) {
+// if err then do something
+// if res you gucci
 
 //serving staticfiles
 function serveStaticFile(res, path, contentType, responseCode){
