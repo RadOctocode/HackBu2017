@@ -1,73 +1,82 @@
-var http = require('http');
 var fs=require('fs');
 var mongoose = require('mongoose');
 var express = require('express');
-
-
-//DB config
+var router=express.Router();
+var assert = require('assert');
 var Schema=mongoose.Schema;
-mongoose.connect('mongodb://localhost:27017/users');
-//jquery post request
-//express end point
-//my schema
-/*var userSchema= new Schema({
-    userName:{
-        type: String;
-        unique:true;
-    };
-    password: String;
-    //description:String;
+var path = require('path');
+var bodyParser=require('body-parser');
+var app=express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.connect('mongodb://localhost:27017/hackbu');
+
+var userSchema= new Schema({
+    username:{
+        type: String,
+        unique:true
+    },
+    password: String
 });
 
-// Line to set up your schema, var User = get schema heres
+var User = mongoose.model('User', userSchema, 'users');
 
-// db variable
-/* var user = new User({
-  // json data
-}); */
-//var user = new User({
+//mongoose.connect('mongodb://localhost:27017/users');
 
+app.post('/pls', function(req, res){
+        console.log(req.body);
+        var user= new User({
+        "username": req.body.username,
+        "password": req.body.password
+        });
+        console.log(user);
+        user.save(function(err){
+            console.log(err);
+            return res.redirect('/');
+        });
 
-//})
+});
 
-//user.save(function(err, res) {
-// if err then do something
-// if res you gucci
+app.post('/login', function(req, res){
+        
+        var username=req.body.username;
+        var password= req.body.password;
+            User.find({ username: username }, function(err, myUser){
+                if(err){console.log("Wrong password/username");}
 
-//serving staticfiles
-function serveStaticFile(res, path, contentType, responseCode){
-    if(!responseCode) responseCode=200;
-    fs.readFile("C:/Users/Michelle/Documents/GitHub/HackBu2017/veiws/"+ path ,function(err,data){
-        if(err){
-            res.writeHead(500,{'Content-Type':'text/plain'});
-            res.end('500 - Internal Error');
-        }
+                else{
+                        if(myUser[0].password===password){
+                            return res.redirect('/home');
+                        }
 
-        else{
-            res.writeHead(responseCode,{'Content-Type': contentType});
-               res.end(data);
-        }
-    });
-
-}//serving staticfiles
-
-
-//create Server
-http.createServer(function(req,res){ 
-    var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
-    switch(path){
-    	case '':
-    			serveStaticFile(res, "index.html", 'text/html');
-                break;
-    	case '/about':
-    			serveStaticFile(res, 'about.html', 'text/html');
-    			break;
-    	default:
-    			serveStaticFile(res, 'error404.html', 'text/html');
-    			break;
+                        else{
+                            console.log("Wrong password/username");
+                        }
+                }
+            });
+});
 
 
-    }
-}).listen(3000);
 
-console.log('Server started on localhost:3000; press Ctrl-C to terminate....'); 
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname+'/veiws/index.html'));
+});
+
+app.get('/register', function(req, res) {
+    res.sendFile(path.join(__dirname+'/veiws/registration.html'));
+});
+
+app.get('/login', function(req, res) {
+    res.sendFile(path.join(__dirname+'/veiws/login.html'));
+});
+
+app.get('/home', function(req, res) {
+    res.sendFile(path.join(__dirname+'/veiws/homePage.html'));
+});
+
+
+app.listen(3000, function() {
+    console.log('Running on localhost:3000');
+});

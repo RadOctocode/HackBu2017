@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="helloWorld.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script>
+<style>
+body {
+	background-image: url("");
+}
+div {text-align: center;
+}
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #FFCC00;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
 
-$(function() {
+.button:hover {background-color: #ddb100}
 
-	$("#createAccount").click(function createAcount(event){
-		var json={
-		"username":	$("#username").val(),
-		"password":	$("#password").val()
-		};
+.button:active {
+  background-color: #ddb100;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+p {
+    font-family: "Trebuchet MS";
+    font-size: 40px;
+color: #FFCC00;
+text-align: center;
 
-		console.log(json);
-		return json;
-	});
-
-
-});
-
-</script>
+}
+p {
+	text-shadow: -2px -2px #000000;
+}
+</style>
 </head>
 <body>
-<h1>Create Account</h1>
-<form  name ="createAccount">
-  First name:<br>
-  <input type="text" id="username" value="">
-  <br>
-  password:<br>
-  <input type="text" id="password" value="">
-  <br><br>
-  <input id="createAccount" type="button" value="Submit">
-</form> 
+<h1>Welcome to FightBook!</h1>
+<a href="http://localhost:3000/register" class="button"><b>Sign up</font></b></a>
+<a href="http://localhost:3000/login" class="button"><b>Login</b></a> </div>
+
+
 
 
 <html>
